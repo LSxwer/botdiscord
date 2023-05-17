@@ -1,38 +1,49 @@
-require('dotenv').config();
-const { REST, Routes , Client , IntentsBitField } = require('discord.js');
+const { REST, Routes, userMention, ApplicationCommandOptionType, ApplicationCommandType, Options } = require('discord.js');
+const { clientId, guildId, token } = require('./config.json');
+const fs = require('node:fs');
+const path = require('node:path');
+const { type } = require('node:os');
 
 const commands = [
-  {
-    name: 'hey',
-    description: 'Replies with hey!',
-  },
-  {
-    name: 'ping',
-    description: 'Pong!',
-  },
-  {
-    name: 'minh',
-    description: 'ping minh',
-    
-  }
-];
+	{
+		name:'perm',
+		description:'@everyone',
+	},
 
-const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
-(async () => { 
-  try {
-    console.log('Registering slash commands...');
 
-    await rest.put(
-      Routes.applicationGuildCommands(
-        process.env.CLIENT_ID,
-        process.env.GUILD_ID
-      ),
-      { body: commands }
-    );
 
-    console.log('Slash commands were registered successfully!');
-  } catch (error) {
-    console.log(`There was an error: ${error}`);
-  }
-})(); 
+
+	{
+		name:'elochecker',
+		description:'check ur random eloo'
+	}
+
+
+	
+	
+
+	
+
+
+]
+
+const rest = new REST().setToken(token);
+
+// and deploy your commands!
+(async () => {
+	try {
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		// The put method is used to fully refresh all commands in the guild with the current set
+		const data = await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	} catch (error) {
+		// And of course, make sure you catch and log any errors!
+		console.error(error);
+	}
+})();

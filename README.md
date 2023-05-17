@@ -1,2 +1,2 @@
 # botdiscord
-discordbot_template
+Made By Pham Dang
